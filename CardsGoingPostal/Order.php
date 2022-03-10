@@ -2,6 +2,14 @@
 
 class Order{
 
+    public $items;
+    public $shipTo;
+    public $price;
+
+
+    function submit(){
+
+    }
 
 
 
