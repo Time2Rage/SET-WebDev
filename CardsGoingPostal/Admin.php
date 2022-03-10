@@ -1,6 +1,6 @@
 <?php
 
-class admin
+class Admin
 {
 
 }
