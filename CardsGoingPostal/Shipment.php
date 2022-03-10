@@ -5,6 +5,11 @@ class Shipment {
     private $addressList = array();
     private $items = array();
 
-    public function getAddressList(){}
+    public function getAddressList(){
+        return $this->addressList;
+    }
+    public function changeShipmentStatus($update){
+        $this->status = $update;
+    }
 
 }
