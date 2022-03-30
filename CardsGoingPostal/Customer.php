@@ -17,8 +17,6 @@ class Customer extends User {
         $this->creditCard = $creditCard;   
     }
     
-
-
     function changeDetails() :void {
 
         /*
