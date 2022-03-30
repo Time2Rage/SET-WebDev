@@ -2,10 +2,14 @@
 
 class Payments{
 
-    public $nameOnCard;
-    public $nnNr;
-    public $expDate;
-    public $secCode;
+    public $nameOnCard, $nnNr, $expDate, $secCode;
+
+    function __construct($nameOnCard, $nnNr, $expDate, $secCode){
+        $this->nameOnCard = $nameOnCard;
+        $this->nnNr= $nnNr;
+        $this->expDate = $expDate;
+        $this->secCode = $secCode;
+    }
 
     function charge($amount)
     {

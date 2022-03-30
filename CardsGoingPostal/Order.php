@@ -2,11 +2,16 @@
 
 class Order{
 
-    public $items;
-    public $shipTo;
-    public $price;
+    public $items, $shipTo, $price;
 
 
+    function __construct($items, $shipTo, $price){
+
+        $this->items = $items;
+        $this->shipTo= $shipTo;
+        $this->price = $price;
+        
+    }
     function submit(){
 
     }

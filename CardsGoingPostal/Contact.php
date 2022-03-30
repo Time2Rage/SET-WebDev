@@ -2,12 +2,7 @@
 
 class Contact
 {
-    public $fName;
-    public $sName;
-    public $addressLine1;
-    public $addressLine2;
-    public $postCode;
-    public $country;
+    public $fName, $sName, $addressLine1, $addressLine2, $postCode, $country;
 
 
     public function __construct($fName, $sName, $addressLine1, $addressLine2, $postCode, $country)
@@ -21,6 +16,14 @@ class Contact
     }
 
     function modifyAddress(){
+
+        /*
+
+        1. Open connection to database
+        2. SQL query to select users contact table 
+        3. create a form to display the current stored address 
+        4. Create a for loop to print out each value from that row      
+        */
 
     }
 

@@ -4,4 +4,11 @@
  */
 class Printer extends User {
     public $empNr;
+
+    function __construct($email, $password, $empNr){
+        User::__construct($email, $password);
+
+        $this->email = $email;
+        $this->password = $password;
+    }
 }
