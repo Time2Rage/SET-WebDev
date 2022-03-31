@@ -9,6 +9,9 @@ class Card
         $this->image = $image;
         $this->text = $text;
         $this->title = $title;
+
+        //DEBUG
+        echo $this . " img created succesfully";
     }
 
     function save(){

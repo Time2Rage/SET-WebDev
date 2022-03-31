@@ -11,5 +11,7 @@ class User {
     }
     
     function login(String $email, String $password): void{}
+    // Adds a new User to the Database
     function create(String $email, String $password): void{}
+
 }

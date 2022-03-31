@@ -4,14 +4,12 @@
  */
 
 class Customer extends User {
-    public $fName, $sName, $billAddress ,$pGallery, $creditCard;
+    public $billAddress ,$pGallery, $creditCard;
 
 
-    function __construct($email, $password, $fName, $sName, $billAddress ,$pGallery, $creditCard){
+    function __construct($email, $password, $billAddress ,$pGallery, $creditCard){
         parent::__construct($email, $password);
 
-        $this->fName = $fName;
-        $this->sName = $sName;
         $this->billAddress = $billAddress;
         $this->pGallery = $pGallery;
         $this->creditCard = $creditCard;   
