@@ -1,9 +1,26 @@
+<?php 
+    session_start(); 
+
+    if($_SESSION['Active'] == false){
+        header("location:login.php");
+        exit;
+    }
+
+?>
+
 <!DOCTYPE html>
-<?php session_start(); ?>
 <html>
-    <header>
+    <head>
         <meta encoding="UTF-8">
         <meta title="CGP"> 
-      </header>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="../css/main.css">
+
+        
+        <H3> Header </H3>
+    </head>
     <body>
 
