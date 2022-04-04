@@ -28,8 +28,9 @@ class User {
 
                     $_SESSION['Username'] = $email;
                     $_SESSION['Active'] = true;
+                    $_SESSION['id'] = $_GET['id'];
                     
-                    header("location:index.php");
+                    header("location:profile.php");
             }
             else{
                 header("location:profile.php");
@@ -52,6 +53,15 @@ class User {
             $sql = sprintf("INSERT INTO %s (%s) values (%s)", "user", implode(", ", array_keys($new_user)), ":" . implode(", :", array_keys($new_user)));
 
             $statement = $connection->prepare($sql)->execute($new_user);
+
+            $new_customer = array(
+                "custID" => $_GET['id'],
+                "email" => $_POST['email'],
+            );
+
+            $sql2 = sprintf("INSERT INTO %s (%s) values (%s)", "customer", implode(", ", array_keys($new_customer)), ":" . implode(", :", array_keys($new_customer)));
+
+            $statement = $connection->prepare($sql2)->execute($new_customer);
     
             header("location:profile.php");
     
