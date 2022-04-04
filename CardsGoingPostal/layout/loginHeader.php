@@ -1,10 +1,7 @@
 <?php 
     session_start(); 
 
-    if($_SESSION['Active'] == false){
-        header("location:login.php");
-        exit;
-    }
+   
 ?>
 
 <!DOCTYPE html>
@@ -30,17 +27,11 @@
           </div>
 
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="../public/Editor.php"></span> Create image</a></li>
-            <li><a href="../public/Card.php"></span> View Gallery</a></li>
-            <li class="dropdown">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="../public/profile.php">Profile
-                <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                  <li><a href="#">Insert details</a></li>
-                  <li><a href="#">Update details</a></li>
-                </ul>
-            </li>
-            <li><a href="#"></span> Cart</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-user"></span> Create image</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-user"></span> View Gallery</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Cart</a></li>
+
             <form class="navbar-form navbar-left" action="../src/session.php">
               <button name="Submit" value="Logout" class="button" type="submit">Log out</button>
             </form>
