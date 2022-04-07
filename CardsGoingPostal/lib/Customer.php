@@ -7,25 +7,23 @@ class Customer extends User {
     public $billAddress ,$pGallery, $creditCard;
 
 
-    function __construct($email, $password, $billAddress ,$pGallery, $creditCard){
+    function __construct($email, $password){
         parent::__construct($email, $password);
 
 
-        $this->billAddress = $billAddress;
-        $this->pGallery = $pGallery;
-        $this->creditCard = $creditCard;
+     
     }
-    
+
 
 
 
     function changeUser($email, $password) :void {
         try{
-            require_once '../src/DBconnect.php';
+            require_once '../src/DBconnection.php';
 
             $user =[
-                "email" => $_POST[$email],
-                "password" => $_POST[$password],
+                "email" => $email,
+                "password" => $password,
             ];
 
             $sql = "UPDATE users
@@ -47,9 +45,9 @@ class Customer extends User {
        
     }
 
-    function billAddress($fName, $sName, $addressLine1, $addressLine2, $postCode, $country) :void {
+    function changeBillAddress($fName, $sName, $addressLine1, $addressLine2, $postCode, $country) :void {
         try{
-            require_once '../src/DBconnect.php';
+            require_once '../src/DBconnection.php';
 
             $user =[
                 "fName" => $_POST[$fName],
@@ -84,9 +82,9 @@ class Customer extends User {
        
     }
 
-    function creditCard($nameOnCard, $ccNr, $expDate, $secCode) :void {
+    function changeCreditCard($nameOnCard, $ccNr, $expDate, $secCode) :void {
         try{
-            require_once '../src/DBconnect.php';
+            require_once '../src/DBconnection.php';
 
             $user =[
                 "nameOnCard" => $_POST[$nameOnCard],
@@ -114,5 +112,59 @@ class Customer extends User {
             echo $sql . "<br>" . $error->getMessage();
         }
        
+    }
+
+
+    function insertBillAddress($ctcID, $custID , $fName, $sName, $addLine1, $addLine2, $zip, $country){
+        require_once '../src/DBconnection.php';
+
+
+       try {
+            $new_user = array(
+                "ctcID" => $ctcID,
+                "custID" => $custID,
+                "fName" => $fName,
+                "sName" => $sName,
+                "addLine1" => $addLine1,
+                "addLine2" => $addLine2,
+                "zip" => $zip,
+                "country" => $country,
+            );
+
+            var_dump($new_user);
+    
+
+           $sql = sprintf("INSERT INTO %s (%s) values (%s)", "contact", implode(", ", array_keys($new_user)), ":" . implode(", :", array_keys($new_user)));
+           $statement = $connection->prepare($sql)->execute($new_user);
+           echo("Address entered successfully");
+       } 
+       catch(PDOException $error) {
+           echo $sql . "<br>" . $error->getMessage();
+       }
+    }
+
+
+    function insertCreditCard($custID, $ccNr, $fName, $sName, $expDate, $secNr){
+        require_once '../src/DBconnection.php';
+
+
+        try {
+            $new_user = array(
+                "custID" => $custID,
+                "ccNr" => $ccNr,
+                "fName" => $fName,
+                "sName" => $sName,
+                "expDate" => $expDate,
+                "secNr" => $secNr,
+            );
+
+
+            $sql = sprintf("INSERT INTO %s (%s) values (%s)", "payment", implode(", ", array_keys($new_user)), ":" . implode(", :", array_keys($new_user)));
+            $statement = $connection->prepare($sql)->execute($new_user);
+            echo ("Card Details entered successfully");
+        } 
+        catch(PDOException $error) {
+            echo $sql . "<br>" . $error->getMessage();
+        }
     }
 }
