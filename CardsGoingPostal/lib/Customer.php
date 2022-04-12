@@ -9,45 +9,50 @@ class Customer extends User {
 
     function __construct($email, $password){
         parent::__construct($email, $password);
-
-
-     
     }
 
+    // Changes user data email and password
+    function changeUser() :void {
+        if (isset($_POST["email"]) && isset($_POST["password"])){
+            try{
+                require '../src/DBconnection.php';
 
+                $user =[
+                    "email" => $email,
+                    "password" => $password,
+                ];
+                #!RD Table name was wrong (users != user)
+                #!RD id is NOT the primary key. The user table has no field ID 
 
+                ##!RD REDO OF ALL SQL STATEMENTS
+                $sql = "UPDATE user
+                        SET email = :email,
+                            password = :password
+                        WHERE email = :email";
 
-    function changeUser($email, $password) :void {
-        try{
-            require_once '../src/DBconnection.php';
+                $statement = $connection->prepare($sql);
+                $statement->bindParam(":email", $email, PDO::PARAM_STR);
+                $statement->bindParam(":password", $password, PDO::PARAM_STR);
+                $statement->execute();
+                $user = $statement->fetch(PDO::FETCH_ASSOC);
 
-            $user =[
-                "email" => $email,
-                "password" => $password,
-            ];
+                if($statement)
+                    echo escape(" User details successfully updated. ");
 
-            $sql = "UPDATE users
-                    SET id = :id,
-                        email = :email,
-                        password = :password,
-                    WHERE id = :id";
-
-            $statement = $connection->prepare($sql);
-            $statement->execute($user);
-
-            if($statement)
-                echo escape(" User details successfully updated. ");
-
+            }
+            catch(PDOException $error) {
+                echo $sql . "<br>" . $error->getMessage();
+            }
+        } else {
+            echo "DOING NOTHING BECAUSE EMAIL OR PASSWORD ARE EMPTY";
         }
-        catch(PDOException $error) {
-            echo $sql . "<br>" . $error->getMessage();
-        }
-       
     }
 
+    // Changes customers billing address
+    #!RD NEED TO IMPLEMENT: if and only-if the field has changed
     function changeBillAddress($fName, $sName, $addressLine1, $addressLine2, $postCode, $country) :void {
         try{
-            require_once '../src/DBconnection.php';
+            require '../src/DBconnection.php';
 
             $user =[
                 "fName" => $_POST[$fName],
@@ -58,7 +63,7 @@ class Customer extends User {
                 "country" => $_POST[$country],
             ];
 
-            $sql = "UPDATE users
+            $sql = "UPDATE user
                     SET id = :id,
                         fName = :fName,
                         sName = :sName,
@@ -79,9 +84,9 @@ class Customer extends User {
         catch(PDOException $error) {
             echo $sql . "<br>" . $error->getMessage();
         }
-       
     }
 
+    // Update customer payment info
     function changeCreditCard($nameOnCard, $ccNr, $expDate, $secCode) :void {
         try{
             require_once '../src/DBconnection.php';
@@ -111,15 +116,12 @@ class Customer extends User {
         catch(PDOException $error) {
             echo $sql . "<br>" . $error->getMessage();
         }
-       
     }
 
-
+    // Adds billing address to the user account
     function insertBillAddress($ctcID, $custID , $fName, $sName, $addLine1, $addLine2, $zip, $country){
-        require_once '../src/DBconnection.php';
-
-
-       try {
+        require '../src/DBconnection.php';
+        try {
             $new_user = array(
                 "ctcID" => $ctcID,
                 "custID" => $custID,
@@ -134,18 +136,18 @@ class Customer extends User {
             var_dump($new_user);
     
 
-           $sql = sprintf("INSERT INTO %s (%s) values (%s)", "contact", implode(", ", array_keys($new_user)), ":" . implode(", :", array_keys($new_user)));
-           $statement = $connection->prepare($sql)->execute($new_user);
-           echo("Address entered successfully");
-       } 
-       catch(PDOException $error) {
-           echo $sql . "<br>" . $error->getMessage();
-       }
+            $sql = sprintf("INSERT INTO %s (%s) values (%s)", "contact", implode(", ", array_keys($new_user)), ":" . implode(", :", array_keys($new_user)));
+            $statement = $connection->prepare($sql)->execute($new_user);
+            echo("Address entered successfully");
+        } 
+        catch(PDOException $error) {
+            echo $sql . "<br>" . $error->getMessage();
+        }
     }
 
-
+    // Adds pyment info to customer account
     function insertCreditCard($custID, $ccNr, $fName, $sName, $expDate, $secNr){
-        require_once '../src/DBconnection.php';
+        require '../src/DBconnection.php';
 
 
         try {
