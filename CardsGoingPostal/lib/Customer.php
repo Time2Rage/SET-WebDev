@@ -3,6 +3,7 @@
  * Customer : inherits : Email and Password : from : User
  */
 
+
 class Customer extends User {
     public $billAddress ,$pGallery, $creditCard;
 
@@ -12,161 +13,83 @@ class Customer extends User {
     }
 
     // Changes user data email and password
-    function changeUser() :void {
-        if (isset($_POST["email"]) && isset($_POST["password"])){
+    function updateUser($email, $password){
+        include_once '../src/common.php';
+       // if (isset($this->email) && $this->email!=NULL && isset($this->password) && $this->password!=NULL){
             try{
-                require '../src/DBconnection.php';
+                $sql = "UPDATE  user
+                        SET     email =     :email,
+                                password =  :password
+                        WHERE   email =     :email";
 
-                $user =[
-                    "email" => $email,
-                    "password" => $password,
-                ];
-                #!RD Table name was wrong (users != user)
-                #!RD id is NOT the primary key. The user table has no field ID 
+                $user = array(
+                    'email' => $email,
+                    'password' => $password,
+                );
 
-                ##!RD REDO OF ALL SQL STATEMENTS
-                $sql = "UPDATE user
-                        SET email = :email,
-                            password = :password
-                        WHERE email = :email";
-
-                $statement = $connection->prepare($sql);
-                $statement->bindParam(":email", $email, PDO::PARAM_STR);
-                $statement->bindParam(":password", $password, PDO::PARAM_STR);
-                $statement->execute();
-                $user = $statement->fetch(PDO::FETCH_ASSOC);
-
-                if($statement)
-                    echo escape(" User details successfully updated. ");
-
+                insert($sql, $user,"User details successfully updated.", "");
             }
             catch(PDOException $error) {
                 echo $sql . "<br>" . $error->getMessage();
             }
-        } else {
-            echo "DOING NOTHING BECAUSE EMAIL OR PASSWORD ARE EMPTY";
-        }
-    }
-
-    // Changes customers billing address
-    #!RD NEED TO IMPLEMENT: if and only-if the field has changed
-    function changeBillAddress($fName, $sName, $addressLine1, $addressLine2, $postCode, $country) :void {
-        try{
-            require '../src/DBconnection.php';
-
-            $user =[
-                "fName" => $_POST[$fName],
-                "sName" => $_POST[$sName],
-                "addressLine1" => $_POST[$addressLine1],
-                "addressLine2" => $_POST[$addressLine2],
-                "postCode" => $_POST[$postCode],
-                "country" => $_POST[$country],
-            ];
-
-            $sql = "UPDATE user
-                    SET id = :id,
-                        fName = :fName,
-                        sName = :sName,
-                        addressLine1 = :addressLine1,
-                        addressLine2 = :addressLine2,
-                        postCode = :postCode,
-                        country = :country,
-                    WHERE id = :id";
-
-            $statement = $connection->prepare($sql);
-            $statement->execute($user);
-
-            if($statement)
-                echo escape(" Address details successfully updated. ");
-
-
-        }
-        catch(PDOException $error) {
-            echo $sql . "<br>" . $error->getMessage();
-        }
-    }
-
-    // Update customer payment info
-    function changeCreditCard($nameOnCard, $ccNr, $expDate, $secCode) :void {
-        try{
-            require_once '../src/DBconnection.php';
-
-            $user =[
-                "nameOnCard" => $_POST[$nameOnCard],
-                "ccNr" => $_POST[$ccNr],
-                "expDate" => $_POST[$expDate],
-                "secCode" => $_POST[$secCode],
-            ];
-
-            $sql = "UPDATE users
-                    SET id = :id,
-                        nameOnCard = :nameOnCard,
-                        ccNr = :ccNr,
-                        expDate = :expDate,
-                        secCode = :secCode,
-                    WHERE id = :id";
-
-            $statement = $connection->prepare($sql);
-            $statement->execute($user);
-
-            if($statement)
-                echo escape(" Card details successfully updated. ");
-
-        }
-        catch(PDOException $error) {
-            echo $sql . "<br>" . $error->getMessage();
-        }
+        //} else {
+         //   echo "DOING NOTHING BECAUSE EMAIL OR PASSWORD ARE EMPTY";
+        //}
     }
 
     // Adds billing address to the user account
-    function insertBillAddress($ctcID, $custID , $fName, $sName, $addLine1, $addLine2, $zip, $country){
-        require '../src/DBconnection.php';
-        try {
-            $new_user = array(
-                "ctcID" => $ctcID,
-                "custID" => $custID,
-                "fName" => $fName,
-                "sName" => $sName,
-                "addLine1" => $addLine1,
-                "addLine2" => $addLine2,
-                "zip" => $zip,
-                "country" => $country,
-            );
+    function insertBillAddress($ctcID, $custID, $fName, $sName, $addLine1, $addLine2, $zip, $country){
+        include '../lib/Contact.php';
 
-            var_dump($new_user);
-    
+        $Contact = new Contact($ctcID, $custID, $fName, $sName, $addLine1, $addLine2, $zip, $country);
 
-            $sql = sprintf("INSERT INTO %s (%s) values (%s)", "contact", implode(", ", array_keys($new_user)), ":" . implode(", :", array_keys($new_user)));
-            $statement = $connection->prepare($sql)->execute($new_user);
-            echo("Address entered successfully");
-        } 
-        catch(PDOException $error) {
-            echo $sql . "<br>" . $error->getMessage();
-        }
+
+        $Contact->insertBillAddress();
     }
 
-    // Adds pyment info to customer account
-    function insertCreditCard($custID, $ccNr, $fName, $sName, $expDate, $secNr){
-        require '../src/DBconnection.php';
 
 
-        try {
-            $new_user = array(
-                "custID" => $custID,
-                "ccNr" => $ccNr,
-                "fName" => $fName,
-                "sName" => $sName,
-                "expDate" => $expDate,
-                "secNr" => $secNr,
-            );
+
+    // Changes customers billing address
+    #!RD NEED TO IMPLEMENT: if and only-if the field has changed
+    public function updateBillAddress($ctcID, $custID, $fName, $sName, $addLine1, $addLine2, $zip, $country) {
+        include '../lib/Contact.php';
+
+        $Contact = new Contact($ctcID, $custID, $fName, $sName, $addLine1, $addLine2, $zip, $country);
+
+        $Contact->updateBillAddress();
+    }
+
+    public function deleteAddress($userIDContainer){
+        include '../lib/Contact.php';
+        $Contact = new Contact(0,$userIDContainer,0,0,0,0,0,0);
+
+        $Contact->deleteAddress();
+    }
 
 
-            $sql = sprintf("INSERT INTO %s (%s) values (%s)", "payment", implode(", ", array_keys($new_user)), ":" . implode(", :", array_keys($new_user)));
-            $statement = $connection->prepare($sql)->execute($new_user);
-            echo ("Card Details entered successfully");
-        } 
-        catch(PDOException $error) {
-            echo $sql . "<br>" . $error->getMessage();
-        }
+
+    // Update customer payment info
+    public function updateCreditCard($custID, $ccNr, $fName, $sName, $expDate, $secNr) {
+        include '../public/Payment.php';
+        $Payment = new Payment($custID, $ccNr, $fName, $sName, $expDate, $secNr);
+
+        $Payment->updateCreditCard();
+    }
+
+
+    // Adds payment info to customer account
+    public function insertCreditCard($custID, $ccNr, $fName, $sName, $expDate, $secNr){
+        include '../public/Payment.php';
+        $Payment = new Payment($custID, $ccNr, $fName, $sName, $expDate, $secNr);
+
+        $Payment->insertCreditCard();
+    }
+
+    public function deleteCard($userIDContainer){
+        include '../public/Payment.php';
+        $Payment = new Payment($userIDContainer, 0, 0, 0, 0, 0);
+
+        $Payment->deleteCard();
     }
 }

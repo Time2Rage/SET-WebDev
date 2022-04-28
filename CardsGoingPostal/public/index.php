@@ -27,4 +27,4 @@ require 'Payment.php';
 </div>
 
 
-<?php require_once "../layout/footer.php";?>
+<?php include "../layout/footer.php"; ?>
