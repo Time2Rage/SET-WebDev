@@ -5,7 +5,7 @@ class Editor {
     public $imageInstance, $textInstance;
 
     function __construct(){
-        
+        self.loadTemplates();
     }
 
     function loadTemplates(){
@@ -44,10 +44,13 @@ class Editor {
         $img = imagescale($img, 480);
         #Display fetched image in the editor box --- UNFINISHED
         #echo '<img src="data:'
+        return $img;
         ?>
         
 <?php
     }
-    function pullText($txtArrayIndex){}
+    function pullText($txtArrayIndex){
+        
+    }
 } #End of class
 
