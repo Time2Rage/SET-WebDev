@@ -16,10 +16,7 @@ require "../layout/header.php";
     </div>
     <!-- Right Template Bar = text-->
     <div id="rightPanel" class="scrollbox">
-    <?php foreach($editor->textTemplate as $txt) {
-            echo '<a><img src="' . $editor->; ?>
-            <?php ?>"></a>'
-        }?>
+    
     </div>
 </div>
 <?php
